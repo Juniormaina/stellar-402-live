@@ -1,30 +1,34 @@
 # Stellar 402 Live
 
-**Build AI agents that discover services, pay on Stellar, and unlock access.**
+[![CI](https://github.com/dunia-hub/stellar-402-live/actions/workflows/ci.yml/badge.svg)](https://github.com/dunia-hub/stellar-402-live/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Node.js 24+](https://img.shields.io/badge/node-%3E%3D24-339933)
+![Stellar testnet](https://img.shields.io/badge/Stellar-testnet-7D00FF)
 
-Stellar 402 Live is a five-day hybrid builder program by [Dunia Hub](https://duniahub.xyz), combining four online workshops with an in-person finale.
+**Build AI agents that discover services, pay on Stellar, and unlock access, with spending controls that hold up under failure.**
 
-Participants begin with a practical need, build payment-enabled digital services, and connect their projects into a small marketplace on Stellar testnet.
+Stellar 402 Live is an open-source toolkit for payment-enabled agents using [x402 on Stellar](https://developers.stellar.org/docs/build/agentic-payments/x402). It provides a working service and paying client with payment-term validation, persistent spending budgets, independent ledger verification, and recovery for uncertain payments.
 
-## What We Are Building
+The repository also powers a hands-on builder program by [Dunia Hub](https://duniahub.xyz): four online workshops and an in-person finale where participants build payment-enabled services and connect them into a marketplace on Stellar testnet.
+
+## What It Does
 
 An agent requests a useful resource. The service responds with HTTP `402 Payment Required`. The client evaluates the payment terms, authorizes a payment within its spending limits, and receives the resource after settlement.
 
 Services could provide educational resources, creator templates, small-business tools, fraud checks, or market information. Builders are encouraged to identify the intended user and practical value before choosing an implementation.
 
-## Working Foundation
+## Features
 
-The repository includes:
-
-- A local HTTP 402 simulation with receipt expiry and replay rejection.
 - A Stellar x402 service accepting testnet USDC.
-- Testnet account creation, XLM funding, and USDC trustline setup.
 - A public service manifest and validated resource discovery.
-- Configurable service origins and resource identifiers.
 - Payment checks for scheme, network, asset, recipient, and amount.
 - A persistent spending budget shared across service targets for each buyer.
 - Independent settlement verification through testnet Horizon.
 - Reconciliation of pending payments with recorded settlement hashes.
+- Payment preflight checks that never sign or spend.
+- Testnet account creation, XLM funding, and USDC trustline setup.
+- Configurable service origins and resource identifiers.
+- A local HTTP 402 simulation with receipt expiry and replay rejection.
 - Workshop exercises and a finale demonstration guide.
 - Automated tests and GitHub Actions validation.
 
@@ -44,7 +48,7 @@ The paying client is deterministic. A model provider is not required.
 
 The service delegates payment verification and settlement to its configured facilitator. The client separately checks the resulting transfer through Horizon before reporting success.
 
-## Program Structure
+## Workshops
 
 | Session | Focus | Deliverable |
 | --- | --- | --- |
@@ -53,6 +57,8 @@ The service delegates payment verification and settlement to its configured faci
 | [03 · Agent Spending Policies](workshops/03-agent-policy/README.md) | Apply payment permissions and persistent budgets | Allowed payments and demonstrated refusals |
 | [04 · Service Discovery](workshops/04-discovery/README.md) | Validate manifests and target another service | Discovery with existing payment controls |
 | [05 · Marketplace Finale](workshops/05-finale/README.md) | Bring builder projects together | A demonstration with payment evidence |
+
+Facilitators should start with the [facilitator guide](docs/facilitator-guide.md). Participants should complete the [preparation checklist](docs/participant-preparation.md) before the first session.
 
 ## Getting Started
 
@@ -160,8 +166,7 @@ With the service running:
 npm run preflight
 ```
 
-Preflight checks discovery, payment terms, accounts, USDC trustlines,
-available funds, and the application budget without signing or paying.
+Preflight checks discovery, payment terms, accounts, USDC trustlines, available funds, and the application budget without signing or paying.
 
 See the [preflight guide](docs/payment-preflight.md) for details.
 
@@ -231,9 +236,10 @@ The default server binds to loopback. A service intended for access from another
 | `src/stellar/` | Live service, client, discovery, verification, budgets, and reconciliation |
 | `scripts/` | Account setup, payment verification, and budget commands |
 | `test/` | Automated tests |
+| `fixtures/` | Shared test fixtures |
 | `docs/` | Setup instructions, evidence, and roadmap |
 | `workshops/` | Exercises and finale guide |
-| `.github/workflows/` | Continuous integration |
+| `.github/` | Continuous integration and contribution templates |
 | `.env.example` | Configuration template |
 
 ## Payment Safety
@@ -252,37 +258,30 @@ A failed or timed-out request does not prove that settlement failed. The client 
 
 - Discovery targets one configured service at a time.
 - Cross-builder deployment and payment demonstrations still require rehearsal.
-- Live signed-payload replay behavior has not yet been tested in this repository.
+- Live replay of a signed payload has been observed once; see the [replay observation](docs/replay-observation.md). Broader replay guarantees are not established.
 - Transfer verification does not establish binding to a new resource request.
 - Pending-payment recovery requires a recorded settlement hash.
 - The ledger verifier accepts one matching USDC transfer per transaction.
 - Budget enforcement depends on preserving the local state.
 - Model integration is not implemented.
-- The complete workshop sequence still needs a fresh-environment rehearsal.
 
 See the [delivery roadmap](docs/roadmap.md) for remaining work.
 
 ## Contributing
 
-Keep changes focused, document resulting behavior, and include meaningful tests.
+We welcome contributions. Start with the [contributing guide](CONTRIBUTING.md) for setup, standards, and workflow.
 
-Before committing:
+Issues open for contributors are labelled [`help wanted`](https://github.com/dunia-hub/stellar-402-live/labels/help%20wanted). Each one lists acceptance criteria and a complexity level:
 
-```sh
-npm run check
-npm test
-git diff --check
-```
+| Label | Typical scope |
+| --- | --- |
+| `complexity: trivial` | Small, clearly bounded change |
+| `complexity: medium` | Feature or fix touching several parts of the codebase |
+| `complexity: high` | Integration, failure-handling, or architectural work |
 
-Use clear commit messages:
+Comment on an issue before starting so we can assign it and avoid duplicate work.
 
-```text
-feat: validate service manifests
-test: reject payments above the remaining budget
-docs: explain pending-payment recovery
-```
-
-Service examples should explain their intended users, practical value, and setup requirements.
+Report vulnerabilities affecting payment authorization, budgets, or settlement privately to fatuma@duniahub.xyz rather than in a public issue.
 
 ## About Dunia Hub
 
@@ -291,6 +290,10 @@ Dunia Hub creates practical learning experiences around AI, blockchain, and open
 Stellar 402 Live brings these areas together: identify a need, build a useful service, and demonstrate how an agent can discover and pay for it.
 
 [Visit Dunia Hub](https://duniahub.xyz)
+
+## License
+
+[MIT](LICENSE) © 2026 Dunia Hub
 
 ## References
 
