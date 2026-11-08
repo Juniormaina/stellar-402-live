@@ -1,6 +1,6 @@
 import { Keypair } from "@stellar/stellar-sdk";
-import { fileURLToPath } from "node:url";
 import { createBudget } from "../src/stellar/budget.js";
+import { budgetPath } from "../src/stellar/budget-location.js";
 
 try {
   const buyer = Keypair.fromSecret(
@@ -8,11 +8,7 @@ try {
   ).publicKey();
 
   const budget = createBudget({
-    path: fileURLToPath(new URL(
-      `../.local/budget-${buyer}.json`,
-      import.meta.url,
-    )),
-    limitAtomic: "10000000",
+    path: budgetPath(buyer),
   });
 
   console.log(JSON.stringify(budget.snapshot(), null, 2));

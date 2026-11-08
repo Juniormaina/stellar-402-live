@@ -1,10 +1,10 @@
 import { Keypair } from "@stellar/stellar-sdk";
 import { x402Client, x402HTTPClient } from "@x402/fetch";
-import { fileURLToPath } from "node:url";
 import { readClientConfig } from "../src/stellar/client-config.js";
 import { discoverResource } from "../src/stellar/discovery.js";
 import { approvePayment } from "../src/stellar/payment-policy.js";
 import { createBudget } from "../src/stellar/budget.js";
+import { budgetPath } from "../src/stellar/budget-location.js";
 import { checkAccounts } from "../src/stellar/preflight.js";
 
 async function getLedgerJson(path) {
@@ -81,11 +81,7 @@ async function main() {
   });
 
   const budget = createBudget({
-    path: fileURLToPath(new URL(
-      `../.local/budget-${buyer}.json`,
-      import.meta.url,
-    )),
-    limitAtomic: "10000000",
+    path: budgetPath(buyer),
   });
 
   const state = budget.snapshot();

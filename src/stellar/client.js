@@ -12,7 +12,7 @@ import { probeReplay } from "./replay-probe.js";
 import { approvePayment } from "./payment-policy.js";
 import { verifySettlement } from "./verify-settlement.js";
 import { createBudget } from "./budget.js";
-import { fileURLToPath } from "node:url";
+import { budgetPath } from "./budget-location.js";
 
 async function main() {
   const config = readClientConfig();
@@ -67,11 +67,7 @@ async function main() {
   console.log(`  USDC atomic units: ${approved.accepts[0].amount}`);
 
   const budget = createBudget({
-    path: fileURLToPath(new URL(
-      `../../.local/budget-${signer.address}.json`,
-      import.meta.url,
-    )),
-    limitAtomic: "10000000",
+    path: budgetPath(signer.address),
   });
 
   const reservation = budget.reserve(

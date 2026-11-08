@@ -6,9 +6,9 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { Keypair } from "@stellar/stellar-sdk";
 import { createBudget } from "../src/stellar/budget.js";
+import { budgetPath } from "../src/stellar/budget-location.js";
 import { reconcileBudget } from "../src/stellar/reconcile-budget.js";
 import { validatePaymentContext } from "../src/stellar/payment-context.js";
 
@@ -19,10 +19,7 @@ try {
     process.env.STELLAR_PRIVATE_KEY,
   ).publicKey();
 
-  const realPath = fileURLToPath(new URL(
-    `../.local/budget-${buyer}.json`,
-    import.meta.url,
-  ));
+  const realPath = budgetPath(buyer);
 
   const originalBytes = readFileSync(realPath);
   const realState = JSON.parse(originalBytes.toString("utf8"));

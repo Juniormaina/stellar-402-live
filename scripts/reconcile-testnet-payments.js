@@ -1,6 +1,6 @@
 import { Keypair } from "@stellar/stellar-sdk";
-import { fileURLToPath } from "node:url";
 import { createBudget } from "../src/stellar/budget.js";
+import { budgetPath } from "../src/stellar/budget-location.js";
 import { reconcileBudget } from "../src/stellar/reconcile-budget.js";
 
 try {
@@ -10,11 +10,7 @@ try {
   ).publicKey();
 
   const budget = createBudget({
-    path: fileURLToPath(new URL(
-      `../.local/budget-${buyer}.json`,
-      import.meta.url,
-    )),
-    limitAtomic: "10000000",
+    path: budgetPath(buyer),
   });
 
   const results = await reconcileBudget({

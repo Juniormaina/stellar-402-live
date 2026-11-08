@@ -12,6 +12,7 @@ import {
 import { dirname } from "node:path";
 import { randomUUID } from "node:crypto";
 import { validatePaymentContext } from "./payment-context.js";
+import { DEFAULT_BUDGET_LIMIT_ATOMIC } from "./budget-location.js";
 
 function amount(value) {
   if (typeof value !== "string" || !/^(0|[1-9]\d*)$/.test(value)) {
@@ -22,7 +23,7 @@ function amount(value) {
 
 export function createBudget({
   path,
-  limitAtomic = "10000000",
+  limitAtomic = DEFAULT_BUDGET_LIMIT_ATOMIC,
 }) {
   const limit = amount(limitAtomic);
 
