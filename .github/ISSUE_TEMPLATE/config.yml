@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Contributing guide
+    url: https://github.com/dunia-hub/stellar-402-live/blob/main/CONTRIBUTING.md
+    about: Setup, standards, and the Stellar Wave workflow
+  - name: Testnet payment guide
+    url: https://github.com/dunia-hub/stellar-402-live/blob/main/docs/testnet-payments.md
+    about: Configure accounts and run the live flow

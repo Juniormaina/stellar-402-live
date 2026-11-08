@@ -1,0 +1,50 @@
+name: Bug report
+description: Report incorrect behavior
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. npm ci
+        2. npm run ...
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Relevant output
+      description: Remove secret keys and account seeds before pasting.
+      render: shell
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: "Node 24.x, Ubuntu 24.04, commit abc1234"
+    validations:
+      required: true
+  - type: dropdown
+    id: flow
+    attributes:
+      label: Affected flow
+      options:
+        - Local simulation
+        - Stellar testnet flow
+        - Workshops or documentation
+        - Other
+    validations:
+      required: true
